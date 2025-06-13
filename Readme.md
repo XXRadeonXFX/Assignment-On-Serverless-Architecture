@@ -141,3 +141,81 @@ For this assignment, we checked the following S3 buckets:
 - AWS has started enforcing **mandatory server-side encryption** (SSE-S3) for new buckets in many regions.
 - Disabling encryption is no longer supported during bucket creation in this account/region.
 - Lambda function successfully detected this enforced encryption and reported correctly.
+
+---
+# Assignment 4 - Automatic EBS Snapshot and Cleanup
+
+## Objective
+
+Automate the backup process for an EBS volume and ensure that snapshots older than a specified retention period (30 days) are deleted to save storage costs. This is implemented using AWS Lambda and Boto3.
+
+## Steps Followed
+
+### 1️⃣ EBS Setup
+
+- Created an EBS volume:
+    - Volume ID: `vol-0407d37853c5a5c83` *(replace with your Volume ID)*
+    - Type: gp3
+    - Size: 8 GiB
+- Used this volume as the target for automated snapshot and cleanup.
+        ![EBS](Screenshots/Screenshot-4-EBS-Snapshot-Cleanup/EBS.png)
+
+
+### 2️⃣ IAM Role
+
+- Created IAM role: `prince-lamdba-role-task-1`
+- Attached policy:
+    - `AmazonEC2FullAccess`
+- This allows Lambda to:
+    - Create snapshots
+    - Describe snapshots
+    - Delete snapshots
+
+        ![iam-role](Screenshots/Screenshot-4-EBS-Snapshot-Cleanup/iam-role.png)
+
+
+### 3️⃣ Lambda Function
+
+- Created Lambda function: `prince-lambda`
+- Runtime: Python 3.13
+- Execution role: `prince-lamdba-role-task-1`
+        ![lambda-function](Screenshots/Screenshot-4-EBS-Snapshot-Cleanup/lambda-function.png)
+
+
+### 4️⃣ Lambda Code
+
+- The Lambda function performs two main tasks:
+    1. Creates a snapshot of the target EBS volume.
+    2. Deletes snapshots older than **30 days** (based on `StartTime`).
+
+- Additional features:
+    - Tags the snapshot with `CreatedBy = Lambda-AutoSnapshot` for easier identification.
+    - Filters only its own snapshots when deleting old ones.
+        
+        ![python-boto-3-code](Screenshots/Screenshot-4-EBS-Snapshot-Cleanup/python-boto-3-code.png)
+
+
+### 5️⃣ Testing
+
+- Manually invoked the Lambda function via a test event.
+- Monitored output via **Execution Results** and **CloudWatch Logs**.
+- Verified in EC2 Console:
+    - New snapshot was successfully created.
+    - Older snapshots (if older than 30 days) were deleted automatically.
+- No errors encountered.
+        ![invoke-function](Screenshots/Screenshot-4-EBS-Snapshot-Cleanup/invoke-function.png)
+
+### 6️⃣ Conclusion
+
+- The Lambda function successfully automates the EBS snapshot and cleanup process.
+- This solution helps:
+    - Maintain regular volume backups.
+    - Save cost by cleaning up old snapshots.
+    - Ensure compliance with backup retention policies.
+- The function can easily be enhanced to:
+    - Run on a schedule (via EventBridge).
+    - Support multiple volumes.
+    - Add additional snapshot tagging for compliance.
+
+
+
