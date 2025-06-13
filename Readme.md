@@ -32,3 +32,37 @@ Automatically stop EC2 instances tagged `Auto-Stop` and start instances tagged `
 
 ______________________________________________
 # Assignment 2 - Automated EC2 Instance Management
+
+## Objective
+
+Automatically delete files older than 30 days in a specific S3 bucket using AWS Lambda and Boto3.
+
+## Steps Followed
+
+1. Created S3 bucket `radeon-s3-cleanup-assignment`.
+   ![s3](Screenshots/Screenshot-2-S3-Cleanup/s3.png)
+
+2. Uploaded test files (some new, some old).
+   ![upload-files](Screenshots/Screenshot-2-S3-Cleanup/upload-files.png)
+
+3. Create an IAM role `prince-lamda-role-task-1` with `AmazonS3FullAccess`.
+   ![IAM-role](Screenshots/Screenshot-2-S3-Cleanup/IAM-role.png)
+
+4. Create Lambda function (in this case its) `prince-lambda` with Python 3.13.
+   ![lambda-function](Screenshots/Screenshot-2-S3-Cleanup/lambda-function.png)
+
+5. Lambda function:
+    - Lists objects in the bucket.
+    - Deletes objects older than 30 days.
+    - Logs deleted object names.
+   ![python-boto-3-code](Screenshots/Screenshot-2-S3-Cleanup/python-boto-3-code.png)
+
+
+6. Tested Lambda manually.
+
+## Screenshots
+
+- [ ] S3 bucket and objects
+- [ ] IAM Role created
+- [ ] Lambda function code + test result
+- [ ] S3 bucket after cleanup
