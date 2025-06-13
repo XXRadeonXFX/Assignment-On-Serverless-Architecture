@@ -59,10 +59,4 @@ Automatically delete files older than 30 days in a specific S3 bucket using AWS 
 
 
 6. Tested Lambda manually.
-
-## Screenshots
-
-- [ ] S3 bucket and objects
-- [ ] IAM Role created
-- [ ] Lambda function code + test result
-- [ ] S3 bucket after cleanup
+   ![invoke-function](Screenshots/Screenshot-2-S3-Cleanup/invoke-function.png)
